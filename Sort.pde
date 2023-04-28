@@ -1,16 +1,18 @@
 import java.util.Random;
 
-int arraylength = 20;
+int arraylength = 500;
 int[] x = new int[arraylength];
 int[] heap_array = new int[arraylength];
 int[] graph = new int[arraylength];
 int scene = 0;
 int graph_type = 0;
+int sort_type = 0;
 
 PFont japaneseFont;
 
 GraphWindow gw;
-HeapSort hs;
+SortTemplate[] sort = new SortTemplate[3];
+ArrayList<Button> button = new ArrayList<>();
 
 private boolean check_heap(int[] arr, int n) {
   for (int i = n - 1; i >= 0; i--) {
@@ -120,30 +122,28 @@ private int[] select(int[] arr) {
 
 private void gui() {
   if (scene == 0) {
-    fill(255);
-    stroke(0);
-    rect(120, 240, 160, 30);
-    textAlign(CENTER);
-    
-    for (int i = 0; i < 3; i++)
-      ellipse(140, 60 + i * 30, 20, 20);
-    fill(50, 100, 255);
-    noStroke();
-    ellipse(140.5, 60.5 + graph_type * 30, 14, 14);
-    
-    fill(0);
-    textSize(20);
-    textAlign(CENTER);
-    text("START", 200, 265);
-    textAlign(LEFT);
-    String[] buttonText = { "棒グラフ", "散布図", "折れ線グラフ" };
-    for (int i = 0; i < 3; i++)
-      text(buttonText[i], 160, 70 + i * 30);
+    for (int i = 0; i < button.size(); i++) {
+      button.get(i).update();
+    }
   }
 }
 
 public void settings() {
-  size(400, 300);
+  size(400, 400);
+}
+
+private void buttonsetup() {
+  button.add(new Button("", 120, 340, 160, 30, "START"));
+  String[] graphtype_name = { "棒グラフ", "散布図", "棒グラフ" };
+  for (int i = 0; i < 3; i++) {
+    button.add(new Button("radio", 60, 40 + i * 30, 20, 20, graphtype_name[i]));
+    if (i == 0) button.get(i+1).check = true;
+  }
+  String[] sorttype_name = { "ヒープソート", "挿入ソート", "クイックソート" };
+  for (int i = 0; i < 3; i++) {
+    button.add(new Button("radio", 200, 40 + i * 30, 20, 20, sorttype_name[i]));
+    if (i == 0) button.get(i+4).check = true;
+  }
 }
 
 public void setup() {
@@ -155,37 +155,64 @@ public void setup() {
     x[i] = random.nextInt(0, 501);
   }
   
-  hs = new HeapSort(x);
-  //graph = hs.fastsort();
-  //array_draw(graph);
+  sort[0] = new HeapSort(x);
+  sort[1] = new InsertionSort(x);
+  sort[2] = new QuickSort(x);
   
   gw = new GraphWindow();
+  buttonsetup();
+  
 }
 
 public void draw() {
   background(255);
   gui();
-  if (scene == 1)
-    hs.updateGraph();
-  graph = hs.getArray();
+  if (scene == 1) {
+    sort[sort_type].updateGraph();
+  }
+  graph = sort[sort_type].getArray();
   gw.setArray(graph);
+  //println(mouseX + "," + mouseY);
 }
 
 void mousePressed() {
   if (scene == 0) {
-    if (mouseX > 120 && mouseX < 280) {
+    
+    if (mouseX > 40 && mouseX < 200) {
       for (int i = 0; i < 3; i++) {
-        if (mouseY > 50 + i * 30 && mouseY < 70 + i * 30) {
+        if (mouseY > 30 + i * 30 && mouseY < 50 + i * 30) {
           graph_type = i;
         }
       }
     }
-    if (mouseX > 120 && mouseX < 280 && mouseY > 240 && mouseY < 270) {
-      scene = 1;
-      String[] args = {"--location=100,200","SecondApplet"};  
-      PApplet.runSketch(args, gw);
-      String[] graph_type_name = { "bar", "scatter", "line" };
-      gw.graphSetup(graph_type_name[graph_type]);
+    
+    for (int i = 0; i < button.size(); i++) {
+      boolean c = button.get(i).click();
+      if (c) {
+        switch(i) {
+          case 0:
+            scene = 1;
+            String[] args = {"--location=100,200","SecondApplet"};  
+            PApplet.runSketch(args, gw);
+            String[] graph_type_name = { "bar", "scatter", "line" };
+            gw.graphSetup(graph_type_name[graph_type]);
+            break;
+          case 1:
+          case 2:
+          case 3:
+            graph_type = i-1;
+            for (int j = 0; j < 3; j++)
+              button.get(j+1).check = graph_type == j ? true : false;
+            break;
+          case 4:
+          case 5:
+          case 6:
+            sort_type = i-4;
+            for (int j = 0; j < 3; j++)
+              button.get(j+4).check = sort_type == j ? true : false;
+            break;
+        }
+      }
     }
   }
 }

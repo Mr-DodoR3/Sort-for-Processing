@@ -1,9 +1,8 @@
-class HeapSort extends SortTemplate {
-  String mode = "build";
-  
-  HeapSort(int[] aarr) {
-    super(aarr);
+class HeapSort extends SortTemplate {  
+  HeapSort(int[] arg_arr) {
+    super(arg_arr);
     super.gI = super.n - 1;
+    super.status = "build";
   }
   
   private boolean check_heap(int n) {
@@ -70,9 +69,9 @@ class HeapSort extends SortTemplate {
   
   @Override
   public void updateGraph() {
-    if (mode == "build") {
+    if (super.status == "build") {
       if (check_heap(super.n)) {
-        mode = "sort";
+        super.status = "sort";
         super.gI = super.n - 1;
       }
       else {
@@ -83,17 +82,18 @@ class HeapSort extends SortTemplate {
           super.gI = super.n - 1;
       }
     }
-    else if (mode == "sort") {
+    else if (super.status == "sort") {
       super.swap(0, super.gI);
       super.arr = heap_build(super.gI);
       super.gI--;
       if (super.gI <= 0)
-        mode = "end";
+        super.status = "end";
     }
   }
   
   @Override
-  public int[] fastsort() {
-    return heap_sort();
+  public String debugsort() {
+    int[] debug_arr = heap_sort();
+    return super.array_draw(debug_arr);
   }
 }
