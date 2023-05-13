@@ -1,19 +1,22 @@
 import java.util.Random;
 
-int arraylength = 500;
+int arraylength = 200;
 int[] x = new int[arraylength];
 int[] heap_array = new int[arraylength];
 int[] graph = new int[arraylength];
 int scene = 0;
 int graph_type = 0;
 int sort_type = 0;
+int input_focus = -1;
 
 PFont japaneseFont;
 
 GraphWindow gw;
-SortTemplate[] sort = new SortTemplate[3];
+SortTemplate[] sort = new SortTemplate[5];
 ArrayList<Button> button = new ArrayList<>();
 
+
+/*
 private boolean check_heap(int[] arr, int n) {
   for (int i = n - 1; i >= 0; i--) {
     if ((2*i+1) < n) {
@@ -74,14 +77,6 @@ private int[] heap_sort(int[] arr) {
   return arr;
 }
 
-private void array_draw(int[] arr) {
-  String str = "{";
-  for (int i = 0; i < x.length; i++) {
-    str += arr[i] + (i == arr.length - 1 ? "}" : ",");
-  }
-  println("Array=" + str);
-}
-
 private int[] bubble(int[] arr) {
   for (int i = 0; i < arr.length - 1; i++) {
     for (int j = 0; j < arr.length - i - 1; j++) {
@@ -120,6 +115,15 @@ private int[] select(int[] arr) {
   return arr;
 }
 
+private void array_draw(int[] arr) {
+  String str = "{";
+  for (int i = 0; i < x.length; i++) {
+    str += arr[i] + (i == arr.length - 1 ? "}" : ",");
+  }
+  println("Array=" + str);
+}
+*/
+
 private void gui() {
   if (scene == 0) {
     for (int i = 0; i < button.size(); i++) {
@@ -129,24 +133,26 @@ private void gui() {
 }
 
 public void settings() {
-  size(400, 400);
+  size(500, 500);
 }
 
 private void buttonsetup() {
-  button.add(new Button("", 120, 340, 160, 30, "START"));
-  String[] graphtype_name = { "棒グラフ", "散布図", "棒グラフ" };
+  button.add(new Button("", 170, 420, 160, 30, "START"));
+  String[] graphtype_name = { "棒グラフ", "散布図", "折れ線グラフ" };
   for (int i = 0; i < 3; i++) {
-    button.add(new Button("radio", 60, 40 + i * 30, 20, 20, graphtype_name[i]));
+    button.add(new Button("radio", 40, 40 + i * 30, 20, 20, graphtype_name[i]));
     if (i == 0) button.get(i+1).check = true;
   }
-  String[] sorttype_name = { "ヒープソート", "挿入ソート", "クイックソート" };
-  for (int i = 0; i < 3; i++) {
-    button.add(new Button("radio", 200, 40 + i * 30, 20, 20, sorttype_name[i]));
+  String[] sorttype_name = { "バブルソート", "選択ソート", "ヒープソート", "挿入ソート", "クイックソート" };
+  for (int i = 0; i < 5; i++) {
+    button.add(new Button("radio", 270, 40 + i * 30, 20, 20, sorttype_name[i]));
     if (i == 0) button.get(i+4).check = true;
   }
+  button.add(new Button("textbox", 170, 350, 50, 30, ""));
 }
 
 public void setup() {
+  frameRate(6000);
   japaneseFont = createFont("data/NotoSansJP-Medium.otf", 28);
   textFont(japaneseFont);
   
@@ -155,13 +161,14 @@ public void setup() {
     x[i] = random.nextInt(0, 501);
   }
   
-  sort[0] = new HeapSort(x);
-  sort[1] = new InsertionSort(x);
-  sort[2] = new QuickSort(x);
+  sort[0] = new BubbleSort(x);
+  sort[1] = new SelectSort(x);
+  sort[2] = new HeapSort(x);
+  sort[3] = new InsertionSort(x);
+  sort[4] = new QuickSort(x);
   
   gw = new GraphWindow();
   buttonsetup();
-  
 }
 
 public void draw() {
@@ -176,16 +183,8 @@ public void draw() {
 }
 
 void mousePressed() {
+  input_focus = -1;
   if (scene == 0) {
-    
-    if (mouseX > 40 && mouseX < 200) {
-      for (int i = 0; i < 3; i++) {
-        if (mouseY > 30 + i * 30 && mouseY < 50 + i * 30) {
-          graph_type = i;
-        }
-      }
-    }
-    
     for (int i = 0; i < button.size(); i++) {
       boolean c = button.get(i).click();
       if (c) {
@@ -207,12 +206,32 @@ void mousePressed() {
           case 4:
           case 5:
           case 6:
+          case 7:
+          case 8:
             sort_type = i-4;
-            for (int j = 0; j < 3; j++)
+            for (int j = 0; j < 5; j++)
               button.get(j+4).check = sort_type == j ? true : false;
+            break;
+          case 9:
+            input_focus = 9;
             break;
         }
       }
+      else if (button.get(i).type == "textbox"){}
+        //button.get(i).check = false;
+    }
+  }
+}
+
+void keyPressed() {
+  if (keyCode == 8) {
+    if (button.get(input_focus).txt.length() > 0)
+      button.get(input_focus).txt = button.get(input_focus).txt.substring(0, button.get(input_focus).txt.length()-1);
+  }
+  else {
+    int a = int(key) - 48;
+    if (a >= 0 && a <= input_focus) {
+      button.get(9).txt += str(a);
     }
   }
 }

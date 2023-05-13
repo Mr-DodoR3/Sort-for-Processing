@@ -87,6 +87,18 @@ public class Button {
         textAlign(LEFT);
         text(txt, x+w, y+h/2.5);
         break;
+      case "textbox":
+        if (check)
+          rect(x-2, y-2, w+4, h+4);
+        stroke(0);
+        fill(255);
+        rect(x, y, w, h);
+        textSize(h-15);
+        noStroke();
+        fill(text_color);
+        textAlign(RIGHT);
+        text(txt, x+(w/9)*10, y+(h/4)*3);//+(w/7)*3
+        break;
       default:
         if (overmousepointer && overmousepointer_anime)
           rect(x-2, y-2, w+4, h+4);

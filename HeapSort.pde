@@ -1,7 +1,7 @@
 class HeapSort extends SortTemplate {  
   HeapSort(int[] arg_arr) {
     super(arg_arr);
-    super.gI = super.n - 1;
+    super.I = super.n - 1;
     super.status = "build";
   }
   
@@ -72,21 +72,21 @@ class HeapSort extends SortTemplate {
     if (super.status == "build") {
       if (check_heap(super.n)) {
         super.status = "sort";
-        super.gI = super.n - 1;
+        super.I = super.n - 1;
       }
       else {
-        if ((2*super.gI+1) < super.n)
-          super.arr = shift_down(super.gI, super.n);
-        super.gI--;
-        if (super.gI < 0)
-          super.gI = super.n - 1;
+        if ((2*super.I+1) < super.n)
+          super.arr = shift_down(super.I, super.n);
+        super.I--;
+        if (super.I < 0)
+          super.I = super.n - 1;
       }
     }
     else if (super.status == "sort") {
-      super.swap(0, super.gI);
-      super.arr = heap_build(super.gI);
-      super.gI--;
-      if (super.gI <= 0)
+      super.swap(0, super.I);
+      super.arr = heap_build(super.I);
+      super.I--;
+      if (super.I <= 0)
         super.status = "end";
     }
   }

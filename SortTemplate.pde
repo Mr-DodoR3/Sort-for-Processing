@@ -1,11 +1,13 @@
 class SortTemplate {
   private int[] arr = new int[0];
-  private int gI = 0;
+  private int I = 0;
+  private int J = 0;
   private int n;
   private String status = "sort";
   
   SortTemplate(int[] arg_arr) {
-    gI = 0;
+    I = 0;
+    J = 0;
     n = arg_arr.length;
     arr = new int[n];
     for (int i = 0; i < n; i++)

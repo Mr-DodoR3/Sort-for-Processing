@@ -1,6 +1,7 @@
-class InsertionSort extends SortTemplate {
-  InsertionSort(int[] arg_arr) {
+class QuickSort extends SortTemplate {
+  QuickSort(int[] arg_arr) {
     super(arg_arr);
+    println(super.array_draw(quick_sort()));
   }
   
   private void shift(int shift_point_lower, int shift_point_upper) {
@@ -14,20 +15,14 @@ class InsertionSort extends SortTemplate {
     super.arr[l] = temp;
   }
   
-  //----------------------普通の選択ソート----------------------//
-  private int[] insertion_sort() {
-    int n = super.arr.length;
-    for (int i = 1; i < n; i++) {
-      for (int j = 0; j < i; j++) {
-        if (super.arr[i] < super.arr[j]) {
-          shift(j, i);
-        }
-      }
-    }
+  //----------------------普通のクイックソート----------------------//
+  private int[] quick_sort() {
+    int standard = super.arr[floor(super.arr.length/2)];
+    
     
     return super.arr;
   }
-  //----------------------普通の選択ソート----------------------//
+  //----------------------普通のクイックソート----------------------//
   
   @Override
   public void updateGraph() {
@@ -46,7 +41,7 @@ class InsertionSort extends SortTemplate {
   
   @Override
   public String debugsort() {
-    int[] debug_arr = insertion_sort();
+    int[] debug_arr = quick_sort();
     return super.array_draw(debug_arr);
   }
 }
