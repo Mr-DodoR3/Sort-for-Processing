@@ -81,6 +81,7 @@ class HeapSort extends SortTemplate {
         if (super.I < 0)
           super.I = super.n - 1;
       }
+      super.move_bar = super.I;
     }
     else if (super.status == "sort") {
       super.swap(0, super.I);
@@ -88,6 +89,7 @@ class HeapSort extends SortTemplate {
       super.I--;
       if (super.I <= 0)
         super.status = "end";
+      super.move_bar = super.I;
     }
   }
   

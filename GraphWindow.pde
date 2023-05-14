@@ -1,5 +1,6 @@
 public class GraphWindow extends PApplet {
   private int[] arr;
+  private int move_bar;
   private int len = 1;
   private boolean update = false;
   private String type = "bar";
@@ -8,8 +9,9 @@ public class GraphWindow extends PApplet {
     type = atype;
   }
   
-  public void setArray(int[] aarr) {
+  public void setArray(int[] aarr, int amove_bar) {
     arr = aarr; 
+    move_bar = amove_bar;
     len = arr.length;
     update = true;
   }
@@ -24,14 +26,19 @@ public class GraphWindow extends PApplet {
   
   void draw() {
     if (update) {
-      background(0);
-      fill(255);
+      background(color_data[0][0], color_data[0][1], color_data[0][2]);
+      fill(color_data[1][0], color_data[1][1], color_data[1][2]);
       //stroke(0);
       noStroke();
       for (int i = 0; i < len; i++) {
+        if (move_bar == i)
+          fill(color_data[3][0], color_data[3][1], color_data[3][2]);
+        else
+          fill(color_data[1][0], color_data[1][1], color_data[1][2]);
+        float y = (float)arr[i] / (float)maxvalue * 500.0f;
         if (type == "bar") {
           float w = (float)500 / (float)len;
-          rect(i * w, 500 - arr[i], w ,500);
+          rect(i * w, 500 - y, w ,500);
         }
         else if (type == "scatter") {
           float w = (float)500 / (float)len;

@@ -26,16 +26,19 @@ class BubbleSort extends SortTemplate {
       //    shift(j, j+1);
       //  }
       //}
-      if (super.arr[super.J] > super.arr[super.J+1]) {
-        super.swap(super.J, super.J+1);
+      if (super.arr.length > 1) {
+        if (super.arr[super.J] > super.arr[super.J+1]) {
+          super.swap(super.J, super.J+1);
+        }
+        if (super.J < super.n - 2 - super.I) {
+          super.J++;
+        }
+        else {
+          super.I++;
+          super.J = 0;
+        }
       }
-      if (super.J < super.n - 2 - super.I) {
-        super.J++;
-      }
-      else {
-        super.I++;
-        super.J = 0;
-      }
+      super.move_bar = super.J;
       if (!(super.I < super.n - 1))
         super.status = "end";
     }

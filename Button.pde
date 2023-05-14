@@ -15,6 +15,11 @@ public class Button {
   public boolean overmousepointer_anime = true;
   private boolean overmousepointer = false;
   
+  private int cursor = 0;
+  private int anim_delta = 0;
+  
+  public String value = "";
+  
   Button(String atype, int ax, int ay, int aw, int ah, String atxt) {
     txt = atxt;
     setupdata(atype, ax, ay, aw, ah);
@@ -59,6 +64,16 @@ public class Button {
       return false;
   }
   
+  private int delta_count() {
+    if (type == "textbox") {
+      anim_delta++;
+      if (anim_delta > 60) {
+        anim_delta = 0;
+      }
+    }
+    return anim_delta;
+  }
+  
   public void update() {
     pushStyle();//デザイン関係の保存（色など）
     
@@ -89,15 +104,37 @@ public class Button {
         break;
       case "textbox":
         if (check)
-          rect(x-2, y-2, w+4, h+4);
+          rect(x-1, y-1, w+2, h+2);
         stroke(0);
         fill(255);
         rect(x, y, w, h);
-        textSize(h-15);
+        int textsize = h/2;
+        textSize(textsize);
         noStroke();
         fill(text_color);
         textAlign(RIGHT);
-        text(txt, x+(w/9)*10, y+(h/4)*3);//+(w/7)*3
+        text(txt, x-5, y+(h/4)*3);
+        text(value, x+(w/9)*10, y+(h/4)*3);//+(w/7)*3
+        if (cursor > value.length())
+          cursor = value.length();
+        if (delta_count() > 30 && check) {
+          stroke(0);
+          strokeWeight(2);
+          line(x+w - textsize*cursor*0.6f, y+textsize/2, x+w - textsize*cursor*0.6f, (y+textsize/2) + textsize);
+        }
+        break;
+      case "colorbox":
+        if (check)
+          rect(x-1, y-1, w+2, h+2);
+        stroke(0);
+        fill(fill_color);
+        rect(x, y, w, h);
+        textsize = h;
+        textSize(textsize);
+        noStroke();
+        fill(text_color);
+        textAlign(RIGHT);
+        text(txt, x-5, y+(h/4)*3);
         break;
       default:
         if (overmousepointer && overmousepointer_anime)
@@ -112,5 +149,34 @@ public class Button {
     }
     getmousepointer();
     popStyle();//デザイン関係の保存（色など）
+  }
+  
+  public void shift_cursor_left() {
+    if (type == "textbox" && cursor < value.length()) {
+      cursor++;
+    }
+  }
+  public void shift_cursor_right() {
+    if (type == "textbox" && cursor > 0) {
+      cursor--;
+    }
+  }
+  public int get_insert() {
+    if (type == "textbox")
+      return cursor;
+    else
+      return -1;
+  }
+  public String get_value() {
+    if (type == "textbox")
+      return value;
+    else
+      return "none";
+  }
+  public int get_value_int() {
+    if (type == "textbox")
+      return int(value);
+    else
+      return -1;
   }
 }

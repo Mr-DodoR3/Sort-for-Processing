@@ -52,6 +52,7 @@ class SelectSort extends SortTemplate {
       if(super.arr[super.J] < super.arr[B]){
         B = super.J;
       }
+      super.move_bar = B;
       
       if (super.J < super.n-1) {
         super.J++;

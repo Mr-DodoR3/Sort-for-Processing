@@ -1,6 +1,7 @@
 class InsertionSort extends SortTemplate {
   InsertionSort(int[] arg_arr) {
     super(arg_arr);
+    super.I = 1;
   }
   
   private void shift(int shift_point_lower, int shift_point_upper) {
@@ -32,15 +33,25 @@ class InsertionSort extends SortTemplate {
   @Override
   public void updateGraph() {
     if (super.status == "sort") {
-      for (int j = 0; j < super.I; j++) {
-        if (super.arr[super.I] < super.arr[j]) {
-          shift(j, super.I);
-        }
+      //for (int j = 0; j < super.I; j++) {
+      //  if (super.arr[super.I] < super.arr[j]) {
+      //    shift(j, super.I);
+      //  }
+      //}
+      if (super.arr[super.I] < super.arr[super.J]) {
+          shift(super.J, super.I);
       }
-      if (super.I < super.n - 1)
+      super.move_bar = super.J;
+      if (super.J < super.I) {
+        super.J++;
+      }
+      else if (super.I < super.n - 1) {
         super.I++;
-      else
+        super.J = 0;
+      }
+      else {
         super.status = "end";
+      }
     }
   }
   
