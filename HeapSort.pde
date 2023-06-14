@@ -11,8 +11,9 @@ class HeapSort extends SortTemplate {
         int p = 1;
         if ((2*i+2) < n)
           p = super.arr[2*i+1] > super.arr[2*i+2] ? 1 : 2;
-        if (super.arr[i] < super.arr[2*i+p])
+        if (super.arr[i] < super.arr[2*i+p]) {
           return false;
+        }
       }
     }
     return true;
@@ -71,12 +72,14 @@ class HeapSort extends SortTemplate {
   public void updateGraph() {
     if (super.status == "build") {
       if (check_heap(super.n)) {
+        super.check_reset();
         super.status = "sort";
         super.I = super.n - 1;
       }
       else {
-        if ((2*super.I+1) < super.n)
+        if ((2*super.I+1) < super.n) {
           super.arr = shift_down(super.I, super.n);
+        }
         super.I--;
         if (super.I < 0)
           super.I = super.n - 1;
@@ -85,11 +88,13 @@ class HeapSort extends SortTemplate {
     }
     else if (super.status == "sort") {
       super.swap(0, super.I);
+      super.arr_check[super.I] = true;
+      super.move_bar_2 = 0;
+      super.move_bar = super.I;
       super.arr = heap_build(super.I);
       super.I--;
       if (super.I <= 0)
-        super.status = "end";
-      super.move_bar = super.I;
+        super.endSort();
     }
   }
   

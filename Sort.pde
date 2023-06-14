@@ -1,10 +1,14 @@
 import java.util.Random;
+import java.util.List;
+import java.util.ArrayList;
 
 int arraylength = 100;
 int maxvalue = 500;
 int[] x;
 int[] graph;
-int move_bar;
+boolean[] graph_check;
+int move_bar = -1;
+int move_bar_2 = -1;
 int scene = 0;
 int graph_type = 0;
 int sort_type = 0;
@@ -13,10 +17,11 @@ int framerate = 6000;
 int[][] color_data = {
   { 0, 0, 0 },
   { 255, 255, 255 },
-  { 200, 200, 200 },
+  { 225, 225, 225 },
   { 255, 0, 0 },
   { 0, 0, 255 }
 };
+int[] test_array = { 5, 0, 9, 7, 1, 6, 3, 8, 4, 2 };
 
 PFont japaneseFont;
 
@@ -50,7 +55,7 @@ private void buttonsetup() {
     button.add(new Button("textbox", 100, 280 + 40 * i, 50, 30, settings_name[i]));
     button.get(button.size()-1).value = settings_first_value[i];
   }
-  String[] graph_color = { "背景色", "グラフ色(通常)", "グラフ色(終了)", "グラフ色(移動)", "グラフ色(探索)" };
+  String[] graph_color = { "背景色", "グラフ色(通常)", "グラフ色(終了)", "グラフ色(選択)", "グラフ色(予備)" };
   for (int i = 0; i < 5; i++) {
     button.add(new Button("colorbox", 250, 290 + 14 * i, 200, 12, graph_color[i]));
   }
@@ -66,11 +71,15 @@ void resetArray(int arrsize, int valsize) {
   arraylength = arrsize;
   maxvalue = valsize;
   x = new int[arraylength];
-  graph = new int[arraylength];
+  //x = new int[10];
+  graph = new int[10];
+  graph_check = new boolean[arraylength];
 
   Random random = new Random();
+  int[] setdata = { 49,64,377,311,484,305,492,358,191,82 };
   for (int i = 0; i < x.length; i++) {
     x[i] = random.nextInt(1, valsize + 1);
+    //x[i] = setdata[i];
   }
   
   sort[0] = new BubbleSort(x);
@@ -78,6 +87,7 @@ void resetArray(int arrsize, int valsize) {
   sort[2] = new HeapSort(x);
   sort[3] = new InsertionSort(x);
   sort[4] = new QuickSort(x);
+  //System.out.println(sort[4].debugsort());
 }
 
 private void color_set(int bar_num) {
@@ -106,8 +116,10 @@ public void draw() {
   if (scene == 1) {
     sort[sort_type].updateGraph();
     graph = sort[sort_type].getArray();
+    graph_check = sort[sort_type].getcheckArray();
     move_bar = sort[sort_type].getmove();
-    gw.setArray(graph, move_bar);
+    move_bar_2 = sort[sort_type].getmove_2();
+    gw.setArray(graph, graph_check, move_bar, move_bar_2);
   }
   //println(mouseX + "," + mouseY);
 }

@@ -34,13 +34,14 @@ class BubbleSort extends SortTemplate {
           super.J++;
         }
         else {
+          super.arr_check[super.n - super.I - 1] = true;
           super.I++;
           super.J = 0;
         }
       }
       super.move_bar = super.J;
       if (!(super.I < super.n - 1))
-        super.status = "end";
+        super.endSort();
     }
   }
   

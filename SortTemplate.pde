@@ -1,7 +1,8 @@
 class SortTemplate {
   private int[] arr = new int[0];
   private boolean[] arr_check = new boolean[0];
-  private int move_bar = 0;
+  private int move_bar = -1;
+  private int move_bar_2 = -1;
   private int I = 0;
   private int J = 0;
   private int n;
@@ -42,6 +43,20 @@ class SortTemplate {
     
   }
   
+  private void check_reset() {
+    for (int i = 0; i < arr_check.length; i++)
+      arr_check[i] = false;
+  }
+  
+  private void endSort() {
+    status = "end";
+    for (int i = 0; i < arr_check.length; i++)
+      if (!arr_check[i])
+        arr_check[i] = true;
+    move_bar = -1;
+    move_bar_2 = -1;
+  }
+  
   public void updateGraph() {
     
   }
@@ -56,5 +71,8 @@ class SortTemplate {
   
   public int getmove() {
     return move_bar;
+  }
+  public int getmove_2() {
+    return move_bar_2;
   }
 }

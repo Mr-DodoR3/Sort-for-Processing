@@ -22,6 +22,7 @@ class InsertionSort extends SortTemplate {
       for (int j = 0; j < i; j++) {
         if (super.arr[i] < super.arr[j]) {
           shift(j, i);
+          break;
         }
       }
     }
@@ -32,6 +33,7 @@ class InsertionSort extends SortTemplate {
   
   @Override
   public void updateGraph() {
+    super.arr_check[0] = true;
     if (super.status == "sort") {
       //for (int j = 0; j < super.I; j++) {
       //  if (super.arr[super.I] < super.arr[j]) {
@@ -40,17 +42,20 @@ class InsertionSort extends SortTemplate {
       //}
       if (super.arr[super.I] < super.arr[super.J]) {
           shift(super.J, super.I);
+          super.J = super.I;
       }
-      super.move_bar = super.J;
+      super.move_bar = super.I;
+      super.move_bar_2 = super.J;
       if (super.J < super.I) {
         super.J++;
       }
       else if (super.I < super.n - 1) {
+        super.arr_check[super.I] = true;
         super.I++;
         super.J = 0;
       }
       else {
-        super.status = "end";
+        super.endSort();
       }
     }
   }
